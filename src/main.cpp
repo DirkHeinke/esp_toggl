@@ -246,6 +246,7 @@ void stopWork(String currentId) {
     String respBody = resp.body;
     if(resp.status == 200) {
         strip.setPixelColor(0, 0, 0, 0);
+        runningId = "0";
         strip.show();
     } else {
         strip.setPixelColor(0, 255, 0, 0);

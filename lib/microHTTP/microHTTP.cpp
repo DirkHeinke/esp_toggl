@@ -27,7 +27,7 @@ httpResponse microHTTP::get(String host, int port, String path, String user, Str
     if(user && password) {
         sendAuthHeader(user, password);
     }
-    c->print("\r\n\r\n");
+    c->println();
     c->flush();
 
     httpResponse response = readFullResponse();
@@ -89,9 +89,10 @@ httpResponse microHTTP::put(String host, int port, String path, String data, Str
         c->println("Content-Length: " + String(data.length()));
         c->println("");
         c->print(data);
+    } else {
+        c->println("");
     }
 
-    c->print("\r\n\r\n");
     c->flush();
 
     httpResponse response = readFullResponse();
