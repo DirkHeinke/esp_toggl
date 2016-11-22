@@ -4,9 +4,11 @@
 #include <Arduino.h>
 
 struct Settings {
-    char apikey[33] = "";
-    char taskname[33] = "";
-    char wid[33] = "";
+    char ssid[33] = "";           // max length of 32 chars + \0
+    char password[64] = "";       // max length 63 + \0 (WPA2)
+    char apikey[33] = "";         // key is 32 char + \0
+    char wid1[10] = "";            // current length is 6, so 10 should be enough
+    char taskname1[33] = "";       // 32 char might be enough
 };
 
 bool readConfig(Settings &);

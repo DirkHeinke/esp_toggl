@@ -6,9 +6,7 @@
 
 #define MICROHTTP_DEBUG
 
-microHTTP::microHTTP(Client& client) {
-    c = &client;
-}
+microHTTP::microHTTP(Client& client): c(client) {}
 
 void microHTTP::setTimeout(unsigned short timeInMs) {
     response_timeout = timeInMs;
@@ -22,13 +20,13 @@ httpResponse microHTTP::get(String host, int port, String path, String user, Str
 #ifdef MICROHTTP_DEBUG
     Serial.println("Call of get");
 #endif
-    c->connect(host.c_str(), port);
+    c.connect(host.c_str(), port);
     sendHeader("GET", path, host);
     if(user && password) {
         sendAuthHeader(user, password);
     }
-    c->println();
-    c->flush();
+    c.println();
+    c.flush();
 
     httpResponse response = readFullResponse();
 
@@ -46,20 +44,20 @@ httpResponse microHTTP::post(String host, int port, String path, String data, St
 #ifdef MICROHTTP_DEBUG
     Serial.println("Call of post");
 #endif
-    c->connect(host.c_str(), port);
+    c.connect(host.c_str(), port);
     sendHeader("POST", path, host);
     if(user && password) {
         sendAuthHeader(user, password);
     }
 
-    c->println("Content-Type: " + dataType);
+    c.println("Content-Type: " + dataType);
     if(data.length() > 0){
-        c->println("Content-Length: " + String(data.length()));
-        c->println("");
-        c->print(data);
+        c.println("Content-Length: " + String(data.length()));
+        c.println("");
+        c.print(data);
     }
 
-    c->flush();
+    c.flush();
 
     httpResponse response = readFullResponse();
 
@@ -78,22 +76,22 @@ httpResponse microHTTP::put(String host, int port, String path, String data, Str
 #ifdef MICROHTTP_DEBUG
     Serial.println("Call of put");
 #endif
-    c->connect(host.c_str(), port);
+    c.connect(host.c_str(), port);
     sendHeader("PUT", path, host);
     if(user && password) {
         sendAuthHeader(user, password);
     }
 
-    c->println("Content-Type: " + dataType);
+    c.println("Content-Type: " + dataType);
     if(data.length() > 0){
-        c->println("Content-Length: " + String(data.length()));
-        c->println("");
-        c->print(data);
+        c.println("Content-Length: " + String(data.length()));
+        c.println("");
+        c.print(data);
     } else {
-        c->println("");
+        c.println("");
     }
 
-    c->flush();
+    c.flush();
 
     httpResponse response = readFullResponse();
 
@@ -108,21 +106,21 @@ httpResponse microHTTP::put(String host, int port, String path, String data, Str
 }
 
 void microHTTP::sendHeader(String httpMethod, String path, String host) {
-    c->print(httpMethod);
-    c->print(" ");
-    c->print(path);
-    c->println(" HTTP/1.1");
-    c->print("Host: ");
-    c->println(host);
-    c->println("User-Agent: microHTTP/0.1");
+    c.print(httpMethod);
+    c.print(" ");
+    c.print(path);
+    c.println(" HTTP/1.1");
+    c.print("Host: ");
+    c.println(host);
+    c.println("User-Agent: microHTTP/0.1");
 }
 
 void microHTTP::sendAuthHeader(String user, String password) {
 #ifdef MICROHTTP_DEBUG
     Serial.println("Call of AuthHeader");
 #endif
-    c->print("Authorization: Basic ");
-    c->println(encodeBase64(user + ":" + password));
+    c.print("Authorization: Basic ");
+    c.println(encodeBase64(user + ":" + password));
 }
 
 httpResponse microHTTP::readFullResponse() {
@@ -134,15 +132,15 @@ httpResponse microHTTP::readFullResponse() {
     httpResponse resp;
     bool body = false;
 
-    while(!c->available() && ( millis() - timeoutBegin) < response_timeout ) {
+    while(!c.available() && ( millis() - timeoutBegin) < response_timeout ) {
         delay(100);
     }
 
     // Timeout or Data Available
 
-    if(c->available()) {
-        while(c->available()) {
-            char character = (char)c->read();
+    if(c.available()) {
+        while(c.available()) {
+            char character = (char)c.read();
             data += character;
             int dataLength = data.length();
 

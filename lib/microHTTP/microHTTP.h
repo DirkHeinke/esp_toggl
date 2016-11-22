@@ -30,7 +30,7 @@ public:
     httpResponse put(String host, int port, String path, String data, String dataType, String user = "", String password = "");
 
 private:
-    Client* c;
+    Client& c;
     unsigned short response_timeout = 10000;
 
     void sendHeader(String httpMethod, String path, String host);
