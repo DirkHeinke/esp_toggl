@@ -264,28 +264,66 @@ void configPage() {
 
     String content = String("") +
             "<html>"
-                    "<head>"
-                    "<title>Toggl.com Button</title>"
-                    "</head>"
-                "<body>"
-                "<p>Hold button and reconnect power, to change WIFI-Settings.</p>"
-                "<div>"
-                    "<h2>Settings</h2>"
-                    "<form class=\"pure-form pure-form-stacked\">"
-                        "<label for='apikey'>API Key</label>"
-                        "<input type='text' id='apikey' name='apikey' value='" +
-                        String(conf.apikey) +
-                        "' required>"
-                        "<p>Default Task Name: <input type='text' name='taskname' value='" +
-                        String(conf.taskname1) +
-                        "' required></p>"
-                        "<p>Default workspace: <input type='text' name='wid' value='" +
-                        String(conf.wid1) +
-                        "' required></p>"
-                        "<input class=\"pure-button pure-button-primary\" type='submit' value='Submit'>"
-                    "</form>"
+              "<head>"
+                "<title>Toggl.com Button</title>"
+                "<style>"
+                  "body {"
+                    "background-color:#fff;font-family:'Arial';display:flex;align-items:center;justify-content:center;height:100vh;color:#222"
+                  "}"
+                  ".wrapper {"
+                    "background-color:#efefef;width:50%;padding:20px;max-width:500px;"
+                  "}"
+                  ".font-color {color: #f30c16;}"
+                  ".bg-color {background-color: #f30c16;}"
+                  ".text-center {text-align:center;}"
+                  ".flex-column {display:flex;flex-direction:column;}"
+                  "h1 {margin-bottom:5px;}"
+                  "h3 {margin-bottom:10px}"
+                  ".input-container {margin-bottom:20px}"
+                  ".input-container label {"
+                    "color:#666;margin-bottom:3px;font-size:80%;padding-left:2px;"
+                  "}"
+                  ".input-container input {"
+                    "height:16px;margin:0;padding:5px 2px;font-size:16px;"
+                  "}"
+                  "input[type=\"submit\"] {"
+                    "border:none;height:50px;color:white;font-size:18px;font-weight:bold;margin-bottom:20px;transition: background-color .3s ease;"
+                  "}"
+                  "input[type=\"submit\"]:hover {"
+                    "cursor: pointer;background-color: #d70a14;"
+                  "}"
+                "</style>"
+              "</head>"
+              "<body>"
+                "<div class=\"wrapper flex-column\">"
+                  "<h1 class=\"font-color text-center\">Toggl Button</h1>"
+                  "<p class=\"text-center\">Hold button and reconnect power, to change Wifi-Settings.</p>"
+                  "<div>"
+                      "<h3 class=\"font-color\">Settings</h3>"
+                      "<form class=\"pure-form pure-form-stacked flex-column\">"
+                        "<div class=\"input-container flex-column\">"
+                          "<label for='apikey'>API Key</label>"
+                          "<input type='text' id='apikey' name='apikey' value='" +
+                          String(conf.apikey) +
+                          "' required />"
+                        "</div>"
+                        "<div class=\"input-container flex-column\">"
+                          "<label for='taskname'>Default Task Name</label>"
+                          "<input type='text' id='taskname' name='taskname' value='" +
+                          String(conf.taskname1) +
+                          "' required />"
+                        "</div>"
+                        "<div class=\"input-container flex-column\">"
+                          "<label for='wid'>Default Workspace</label>"
+                          "<input type='text' id='wid' name='wid' value='" +
+                          String(conf.wid1) +
+                          "' required>"
+                        "</div>"
+                        "<input class=\"pure-button pure-button-primary bg-color\" type='submit' value='Submit'>"
+                      "</form>"
+                  "</div>"
                 "</div>"
-                "</body>"
+              "</body>"
             "</html>";
 
 //    Serial.println(content);
