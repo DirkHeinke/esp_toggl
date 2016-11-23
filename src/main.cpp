@@ -262,23 +262,33 @@ void configPage() {
         checkToggl();
     }
 
-    String content = "<html><head><title>Toggl.com Button</title><head>";
-    content += "<body>";
-    content += "<p>Hold button and reconnect power, to change WIFI-Settings.</p>";
-    content += "<h2>Settings</h2>";
-    content += "<form>";
-    content += "<p>Toggle API Key: <input type='text' name='apikey' value='";
-    content += conf.apikey;
-    content += "' required></p>";
-    content += "<p>Default Task Name: <input type='text' name='taskname' value='";
-    content += conf.taskname1;
-    content += "' required></p>";
-    content += "<p>Default workspace: <input type='text' name='wid' value='";
-    content += conf.wid1;
-    content += "' required></p>";
-    content += "<input type='submit' value='Submit'>";
-    content += "</form>";
-    content += "</body></html>";
+    String content = String("") +
+            "<html>"
+                    "<head>"
+                    "<title>Toggl.com Button</title>"
+                    "</head>"
+                "<body>"
+                "<p>Hold button and reconnect power, to change WIFI-Settings.</p>"
+                "<div>"
+                    "<h2>Settings</h2>"
+                    "<form class=\"pure-form pure-form-stacked\">"
+                        "<label for='apikey'>API Key</label>"
+                        "<input type='text' id='apikey' name='apikey' value='" +
+                        String(conf.apikey) +
+                        "' required>"
+                        "<p>Default Task Name: <input type='text' name='taskname' value='" +
+                        String(conf.taskname1) +
+                        "' required></p>"
+                        "<p>Default workspace: <input type='text' name='wid' value='" +
+                        String(conf.wid1) +
+                        "' required></p>"
+                        "<input class=\"pure-button pure-button-primary\" type='submit' value='Submit'>"
+                    "</form>"
+                "</div>"
+                "</body>"
+            "</html>";
+
+//    Serial.println(content);
 
     server.send(200, "text/html", content);
 
