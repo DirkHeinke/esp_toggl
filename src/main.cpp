@@ -284,7 +284,7 @@ void configPage() {
                     "color:#666;margin-bottom:3px;font-size:80%;padding-left:2px;"
                   "}"
                   ".input-container input {"
-                    "height:16px;margin:0;padding:5px 2px;font-size:16px;"
+                    "margin:0;padding:5px 2px;font-size:16px;"
                   "}"
                   "input[type=\"submit\"] {"
                     "border:none;height:50px;color:white;font-size:18px;font-weight:bold;margin-bottom:20px;transition: background-color .3s ease;"
