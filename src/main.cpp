@@ -16,9 +16,12 @@
 #define DEBUG
 #define CONNECTION_TIMEOUT 10000
 
-const int ButtonPin = 5;
+#define GPIO0 0 //D3
+#define GPIO2 2 //D4
+
+const int ButtonPin = GPIO0;
 int buttonState = 0;
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, 4, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(1, GPIO2, NEO_GRB + NEO_KHZ800);
 Ticker checkStatus;
 bool queuedCheckToggle = true;
 String runningId = "0";
@@ -32,7 +35,6 @@ String newpassword;
 
 Settings conf;
 WiFiClientSecure wcs;
-WiFiClient wc;
 
 bool startNewEntry();
 String getCurrentId();
@@ -77,6 +79,7 @@ void setup()
             // start AP
             startAP();
             writeConfig(conf);
+            configured = true;
         }
 
         // connected
@@ -87,6 +90,7 @@ void setup()
         // start AP
         startAP();
         writeConfig(conf);
+        configured = true;
     }
 
     strlcpy(conf.password, newpassword.c_str(), sizeof(conf.password));
@@ -147,12 +151,56 @@ void loop()
 
 void handleConfigPage() {
     const String wifiConfigPage = ""
-            "<h1>Network Settings</h1>"
-            "<form>"
-            "SSID: <input name='ssid'><br>"
-            "Password: <input name='password'><br>"
-            "<input type=submit value='Connect'>"
-            "</form>";
+          "<html>"
+              "<head>"
+                  "<title>Toggl.com Button</title>"
+                  "<style>"
+                      "body {"
+                      "background-color:#fff;font-family:'Arial';display:flex;align-items:center;justify-content:center;height:100vh;color:#222"
+                      "}"
+                      ".wrapper {"
+                      "background-color:#efefef;width:50%;padding:20px;max-width:500px;"
+                      "}"
+                      ".font-color {color: #f30c16;}"
+                      ".bg-color {background-color: #f30c16;}"
+                      ".text-center {text-align:center;}"
+                      ".flex-column {display:flex;flex-direction:column;}"
+                      "h1 {margin-bottom:5px;}"
+                      "h3 {margin-bottom:10px}"
+                      ".input-container {margin-bottom:20px}"
+                      ".input-container label {"
+                      "color:#666;margin-bottom:3px;font-size:80%;padding-left:2px;"
+                      "}"
+                      ".input-container input {"
+                      "margin:0;padding:5px 2px;font-size:16px;"
+                      "}"
+                      "input[type=\"submit\"] {"
+                      "border:none;height:50px;color:white;font-size:18px;font-weight:bold;margin-bottom:20px;transition: background-color .3s ease;"
+                      "}"
+                      "input[type=\"submit\"]:hover {"
+                      "cursor: pointer;background-color: #d70a14;"
+                      "}"
+                  "</style>"
+              "</head>"
+              "<body>"
+                  "<div class=\"wrapper flex-column\">"
+                      "<h1 class=\"font-color text-center\">Toggl Button - Network Settings</h1>"
+                      "<div>"
+                          "<form class=\"pure-form pure-form-stacked flex-column\">"
+                              "<div class=\"input-container flex-column\">"
+                                  "<label for='ssid'>SSID</label>"
+                                  "<input type='text' id='ssid' name='ssid' required />"
+                              "</div>"
+                              "<div class=\"input-container flex-column\">"
+                                  "<label for='password'>Password</label>"
+                                  "<input type='text' id='password' name='password' required />"
+                              "</div>"
+                              "<input class=\"pure-button pure-button-primary bg-color\" type='submit' value='Submit'>"
+                          "</form>"
+                      "</div>"
+                  "</div>"
+              "</body>"
+          "</html>";
 
     newssid = server.arg("ssid");
     newpassword = server.arg("password");
