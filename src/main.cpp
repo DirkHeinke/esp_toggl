@@ -113,7 +113,6 @@ void setup()
 void loop()
 {
     if(buttonPressed) {
-        buttonPressed = false;
         Serial.println("Pressed");
         if(runningId != "0") {
             Serial.println("Stop working");
@@ -122,6 +121,8 @@ void loop()
             Serial.println("Start working");
             startNewEntry();
         }
+        buttonPressed = false;
+
     }
 
     if(queuedCheckToggle) {
@@ -400,9 +401,9 @@ bool startNewEntry() {
     int idIndex = respBody.indexOf("\"id\"");
     int kommaIndex = respBody.indexOf(",", idIndex);
     if(idIndex > 0) {
-        String taskId = respBody.substring(idIndex + 5, kommaIndex);
+        runningId = respBody.substring(idIndex + 5, kommaIndex);
         Serial.println("Found taskid:");
-        Serial.println(taskId);
+        Serial.println(runningId);
         strip.setPixelColor(0, 255, 0, 0);
         strip.show();
     } else {
