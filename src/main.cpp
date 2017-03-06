@@ -29,6 +29,7 @@ ESP8266WebServer server(80);
 bool configured = false;
 bool newNetworkSettings = false;
 bool newNetworkFound = false;
+bool buttonPressed = false;
 
 String newssid;
 String newpassword;
@@ -43,6 +44,7 @@ void queueCheckToggl();
 void stopWork(String);
 void configPage();
 void startAP();
+void handleButtonPress();
 
 void setup()
 {
@@ -60,7 +62,9 @@ void setup()
     if(readConfig(conf)) {
         // config found, try to connect
         Serial.println("Trying to connect to: " + String(conf.ssid) + " with " + String(conf.password));
-        configured = true;
+        if(conf.taskname1 && conf.apikey && conf.wid1) {
+            configured = true;
+        }
         WiFi.disconnect();
         WiFi.begin(conf.ssid, conf.password);
 
@@ -78,8 +82,6 @@ void setup()
         if(timeout) {
             // start AP
             startAP();
-            writeConfig(conf);
-            configured = true;
         }
 
         // connected
@@ -89,12 +91,9 @@ void setup()
 
         // start AP
         startAP();
-        writeConfig(conf);
-        configured = true;
     }
 
-    strlcpy(conf.password, newpassword.c_str(), sizeof(conf.password));
-    strlcpy(conf.ssid, newssid.c_str(), sizeof(conf.ssid));
+
 
     Serial.print("Connected. IP: ");
     Serial.println(WiFi.localIP());
@@ -107,24 +106,21 @@ void setup()
     strip.show();
     checkStatus.attach(30, queueCheckToggl);
 
+    attachInterrupt(ButtonPin, handleButtonPress, FALLING);
+
 }
 
 void loop()
 {
-
-    // TODO handle as interrupt
-    int newButtonState = digitalRead(ButtonPin);
-    if(newButtonState != buttonState) {
-        buttonState = newButtonState;
-        if(newButtonState == 0) {
-            Serial.println("Pressed");
-            if(runningId != "0") {
-                Serial.println("Stop working");
-                stopWork(runningId);
-            } else {
-                Serial.println("Start working");
-                startNewEntry();
-            }
+    if(buttonPressed) {
+        buttonPressed = false;
+        Serial.println("Pressed");
+        if(runningId != "0") {
+            Serial.println("Stop working");
+            stopWork(runningId);
+        } else {
+            Serial.println("Start working");
+            startNewEntry();
         }
     }
 
@@ -147,6 +143,9 @@ void loop()
     server.handleClient();
 }
 
+void handleButtonPress() {
+    buttonPressed = true;
+}
 
 
 void handleConfigPage() {
@@ -276,6 +275,9 @@ void startAP() {
 
     Serial.println("Stop AP");
     WiFi.softAPdisconnect();
+    strlcpy(conf.password, newpassword.c_str(), sizeof(conf.password));
+    strlcpy(conf.ssid, newssid.c_str(), sizeof(conf.ssid));
+    writeConfig(conf);
 
 }
 

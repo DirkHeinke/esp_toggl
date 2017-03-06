@@ -13,8 +13,12 @@
  */
 
 #define EEPROM_SIZE 176
+//#define DEBUG
 
 bool readConfig(Settings &conf) {
+#ifdef DEBUG
+    Serial.println("Trying to read config");
+#endif
     EEPROM.begin(EEPROM_SIZE);
     if (EEPROM.read(0) == 'C' && EEPROM.read(1) == 'F'  && EEPROM.read(2) == 'G' ) {
 
@@ -68,6 +72,10 @@ bool readConfig(Settings &conf) {
 }
 
 void writeConfig(Settings conf) {
+#ifdef DEBUG
+    Serial.println("Writing conf");
+    Serial.println(conf.ssid);
+#endif
     EEPROM.begin(EEPROM_SIZE);
 
     EEPROM.write(0, 'C');
